@@ -1,8 +1,8 @@
 package com.wondergroup.hs;
 
-import com.wondersgroup.hs.workLog.client.LogClientWSImpl;
-import com.wondersgroup.hs.workLog.client.WorkLog;
-import com.wondersgroup.hs.workLog.client.WorkLogEditSheet;
+import com.wondersgroup.hs.workLog.client.core.LogClientWSImpl;
+import com.wondersgroup.hs.workLog.client.core.WorkLog;
+import com.wondersgroup.hs.workLog.client.core.WorkLogEditSheet;
 import org.apache.http.cookie.Cookie;
 import org.junit.Test;
 import org.junit.Assert;

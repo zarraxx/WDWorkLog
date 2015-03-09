@@ -1,4 +1,4 @@
-package com.wondersgroup.hs.workLog.client;
+package com.wondersgroup.hs.workLog.client.core;
 
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -20,20 +20,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.wondersgroup.hs.workLog.client.WSUtils.createClientContext;
-import static com.wondersgroup.hs.workLog.client.WSUtils.createHttpClient;
-import static com.wondersgroup.hs.workLog.client.WSUtils.getMethod;
-import static com.wondersgroup.hs.workLog.client.WSUtils.postMethodForClient;
-import static com.wondersgroup.hs.workLog.client.WorkLogEditSheet.*;
-
 /**
  * Created by zarra on 15/3/8.
  */
 public class LogClientWSImpl implements LogClient {
 
     public Cookie getSessionCookie() throws IOException {
-        try (CloseableHttpClient client  = createHttpClient()) {
-            HttpClientContext context = createClientContext(null);
+        try (CloseableHttpClient client  = WSUtils.createHttpClient()) {
+            HttpClientContext context = WSUtils.createClientContext(null);
             CookieStore cookieStore = (CookieStore) context.getAttribute(HttpClientContext.COOKIE_STORE);
             HttpGet httpGet = new HttpGet(WSUtils.APPBaseURL+"wad/vdmLogon.jsp");
             try(CloseableHttpResponse response = client.execute(httpGet,context)){
@@ -54,8 +48,8 @@ public class LogClientWSImpl implements LogClient {
 
         form.put("UserId", username);
         form.put("PassWord", password);
-        try(CloseableHttpClient httpClient = createHttpClient()) {
-            try (CloseableHttpResponse response = postMethodForClient(httpClient, loginURL, form, cookie)) {
+        try(CloseableHttpClient httpClient = WSUtils.createHttpClient()) {
+            try (CloseableHttpResponse response = WSUtils.postMethodForClient(httpClient, loginURL, form, cookie)) {
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == 302)
                     return true;
@@ -110,7 +104,7 @@ public class LogClientWSImpl implements LogClient {
 
     public String getPersonWorkLogPage(Cookie cookie) throws IOException {
         String inputHomeURL = "addPersonWorkLog.jsp";
-        String body = getMethod(inputHomeURL,cookie);
+        String body = WSUtils.getMethod(inputHomeURL, cookie);
 
         return body;
     }
@@ -118,7 +112,7 @@ public class LogClientWSImpl implements LogClient {
     public String getLogsPage(String queryURL,String week,Cookie cookie) throws IOException {
         List<WorkLog> workLogs = new ArrayList<>();
         String url = queryURL +week;
-        String html =  getMethod(url,cookie);
+        String html =  WSUtils.getMethod(url, cookie);
         return html;
     }
 
@@ -177,7 +171,7 @@ public class LogClientWSImpl implements LogClient {
     }
 
     public String getEditLogPage(String url,Cookie cookie) throws IOException {
-        String body = getMethod("wad/"+url,cookie);
+        String body = WSUtils.getMethod("wad/" + url, cookie);
         return body;
     }
 
@@ -217,7 +211,7 @@ public class LogClientWSImpl implements LogClient {
                     project.name = value;
                     projects.add(project);
                 }
-                editSheet.setProjects(projects.toArray(new Project[0]));
+                editSheet.setProjects(projects.toArray(new WorkLogEditSheet.Project[0]));
             }
         }
 
@@ -235,7 +229,7 @@ public class LogClientWSImpl implements LogClient {
                     module.name = value;
                     modules.add(module);
                 }
-                editSheet.setModules(modules.toArray(new Module[0]));
+                editSheet.setModules(modules.toArray(new WorkLogEditSheet.Module[0]));
             }
         }
 
@@ -258,7 +252,7 @@ public class LogClientWSImpl implements LogClient {
         editSheet.setNmWeekCost(v);
         for (Element element : tdWeekCost.getElementsByTag("select")){
             if (element.attr("style").equals("display:none")){
-                List<DayCost> costs = new ArrayList<>();
+                List<WorkLogEditSheet.DayCost> costs = new ArrayList<>();
                 for (Element e:element.getElementsByTag("option")){
                     WorkLogEditSheet.DayCost dayCost = new WorkLogEditSheet.DayCost();
                     String key = e.attr("value");
@@ -267,7 +261,7 @@ public class LogClientWSImpl implements LogClient {
                     dayCost.displayValue = dis;
                     costs.add(dayCost);
                 }
-                editSheet.setDayCosts(costs.toArray(new DayCost[0]));
+                editSheet.setDayCosts(costs.toArray(new WorkLogEditSheet.DayCost[0]));
             }
         }
 

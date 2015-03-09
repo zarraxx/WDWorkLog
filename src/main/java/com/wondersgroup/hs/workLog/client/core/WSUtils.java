@@ -1,4 +1,4 @@
-package com.wondersgroup.hs.workLog.client;
+package com.wondersgroup.hs.workLog.client.core;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;

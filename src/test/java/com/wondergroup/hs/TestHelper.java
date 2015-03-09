@@ -17,11 +17,11 @@ public class TestHelper {
         return in;
     }
 
-    public static File testFile(String filename) throws URISyntaxException {
-        URL url = TestHelper.class.getClassLoader().getResource(filename);
-        File f = new File(url.toURI());
-        return f;
-    }
+//    public static File testFile(String filename) throws URISyntaxException {
+//        URL url = TestHelper.class.getClassLoader().getResource(filename);
+//        File f = new File(url.toURI());
+//        return f;
+//    }
 
     public static Properties loadProperties(String name) throws IOException {
         try(InputStream inputStream = loadFile(name+".properties")) {
