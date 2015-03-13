@@ -37,9 +37,12 @@ public class MainForm {
 
     private String logsURL;
     private String addLogURL;
+    private String removeLogURL;
     private String thisWeek;
 
     private List<WorkLog> logCache = new ArrayList<>();
+
+    private boolean isLoading;
 
     final static private String[] columns = {"Select","确认","ID","项目名称","模块/子系统名","任务类型",
             "已经投入","实际","弹性工作","计划","尚需投入","工作描述","实际投入日期","修改时间"};
@@ -148,13 +151,52 @@ public class MainForm {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    String html = client.getEditLogPage(addLogURL,cookie);
+                    WorkLogEditSheet editSheet = client.getEditSheet(html);
 
+                    //System.out.println(editSheet);
+                    EditLogDialog editLogDialog = new EditLogDialog();
+                    editLogDialog.setCookie(cookie);
+                    editLogDialog.setEditSheet(editSheet);
+
+                    editLogDialog.setSize(800,400);
+                    editLogDialog.setVisible(true);
+
+
+                    setupLogs((String) cbWeek.getSelectedItem());
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error when getEditLogPage");
+                }
             }
         });
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JTable target = tbLogs;
+                int row = target.getSelectedRow();
+                WorkLog log = logCache.get(row);
+                try {
+                    boolean ok = client.removeWorkLog(log.getId(),cookie);
+                    if (ok){
+                        JOptionPane.showMessageDialog(null, "Remove Log Success");
+                        setupLogs((String) cbWeek.getSelectedItem());
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Remove Log Fail");
+                    }
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(null, "Error when remove Log");
+                    e1.printStackTrace();
+                }
+            }
+        });
+        cbWeek.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isLoading)
+                    setupLogs((String) cbWeek.getSelectedItem());
             }
         });
     }
@@ -183,6 +225,7 @@ public class MainForm {
     public void setupData(){
         String html = null;
         try {
+            isLoading = true;
             html = client.getPersonWorkLogPage(cookie);
 
             String[] urls = client.getFuncURLS(html);
@@ -213,9 +256,13 @@ public class MainForm {
                         try {
                             String html = client.getEditLogPage(log.getUrl(),cookie);
                             WorkLogEditSheet editSheet = client.getEditSheet(html);
+
+                            //System.out.println(editSheet);
                             EditLogDialog editLogDialog = new EditLogDialog();
+                            editLogDialog.setCookie(cookie);
                             editLogDialog.setEditSheet(editSheet);
-                            editLogDialog.pack();
+
+                            editLogDialog.setSize(800,400);
                             editLogDialog.setVisible(true);
 
                         } catch (IOException e1) {
@@ -223,14 +270,14 @@ public class MainForm {
                             JOptionPane.showMessageDialog(null, "Error when getEditLogPage");
                         }
 
-                        System.out.println(row);
+                        //System.out.println(row);
                     }
                 }
             });
 
 
 
-            //columnModel.getColumn(0).setWidth(20);
+            isLoading = false;
 
 
         } catch (IOException e) {
@@ -244,13 +291,16 @@ public class MainForm {
             String html = client.getLogsPage(logsURL,week,cookie);
 
             addLogURL = client.getLogFuncURLs(html)[0];
+            removeLogURL = client.getLogFuncURLs(html)[1];
+
+            //System.out.println(removeLogURL);
 
             WorkLog[] logs = client.getWorkLogs(html);
             logCache.clear();
 
             for (WorkLog log:logs){
                 logCache.add(log);
-                System.out.println(log);
+                //System.out.println(log);
             }
 
             AbstractTableModel tableModel = (AbstractTableModel) tbLogs.getModel();

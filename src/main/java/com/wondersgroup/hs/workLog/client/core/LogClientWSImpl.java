@@ -294,4 +294,55 @@ public class LogClientWSImpl implements LogClient {
 
         return editSheet;
     }
+
+    public String[] getThisWeekData(String week,String id,Cookie cookie) throws IOException {
+        String url = "selectWeekDays.jsp?stWeekStart="+week+"&stProjectSn="+id;
+        List<String> cache = new ArrayList<>();
+
+        String html = WSUtils.getMethod(url, cookie);
+
+        Document doc = Jsoup.parse(html);
+
+        for (Element input :doc.getElementsByTag("Input")){
+            String value = input.attr("value");
+            if (value!=null && value.length()>0 && value.contains("/")){
+                cache.add(value);
+            }
+        }
+
+        return cache.toArray(new String[0]);
+    }
+
+    public boolean submitWorkLog(Map<String,String> body,Cookie cookie) throws IOException {
+        String funcName = body.get("wadFormName");
+
+        String url = "submitReloadParentWhenSuccessPMT.jsp?&funcXMLName=WorkLog&funcName=";
+
+        if (funcName.contains("addOne")){
+            url = url+"addOneWorkLogByWeek";
+        }else if(funcName.contains("modifyOne")){
+            url = url+"modifyWorkLogByWeek";
+        }
+
+        String html = WSUtils.postMethod(url,body,cookie);
+
+        //System.out.println(html);
+
+        return html.contains("工作日志表成功");
+    }
+
+    public boolean removeWorkLog(String id,Cookie cookie) throws IOException {
+        String url = "wad/submitReloadWhenSuccess.jsp?&funcXMLName=WAD_WorkLog_Config.xml&funcName=removeWorkLog";
+
+        Map<String,String> postData = new HashMap<>();
+
+        postData.put("wadCurrentPage","1");
+        postData.put("wadSummaryLine","null");
+        postData.put("nmSn",id);
+
+        String html = WSUtils.postMethod(url,postData,cookie);
+
+        return html.contains("工作日志表成功");
+
+    }
 }

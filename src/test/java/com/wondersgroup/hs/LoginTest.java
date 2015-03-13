@@ -1,4 +1,4 @@
-package com.wondergroup.hs;
+package com.wondersgroup.hs;
 
 import com.wondersgroup.hs.workLog.client.core.LogClientWSImpl;
 import com.wondersgroup.hs.workLog.client.core.WorkLog;

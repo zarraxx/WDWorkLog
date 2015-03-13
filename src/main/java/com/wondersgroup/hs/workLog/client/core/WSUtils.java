@@ -89,7 +89,7 @@ public class WSUtils {
             for (Map.Entry<String, String> entry : formData.entrySet()) {
                 formParams.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
             }
-            UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+            UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "GBK");
 
             httpPost.setEntity(uefEntity);
         }
