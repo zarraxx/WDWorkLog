@@ -183,6 +183,9 @@ public class LogClientWSImpl implements LogClient {
         WorkLogEditSheet editSheet = new WorkLogEditSheet();
         Elements fields = doc.getElementsByAttributeValue("class","colObj");
 
+
+        System.out.println(fields.size());
+
         int beginIndex = 0;
 
         if (fields.size() == 17)
