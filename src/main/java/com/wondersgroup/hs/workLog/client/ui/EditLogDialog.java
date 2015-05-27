@@ -107,9 +107,11 @@ public class EditLogDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 if (editSheet != null && !isInSetupData) {
                     int index = cbModule.getSelectedIndex();
-                    WorkLogEditSheet.Module module = availableMods.get(index);
-                    editSheet.setNmTaskSn(module.id);
-                    currentModule = module;
+                    if (index >0 && index < availableMods.size()){
+                        WorkLogEditSheet.Module module = availableMods.get(index);
+                        editSheet.setNmTaskSn(module.id);
+                        currentModule = module;
+                    }
                 }
             }
         });
