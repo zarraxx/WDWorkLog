@@ -211,13 +211,15 @@ public class MainForm {
         mainForm.client = new LogClientWSImpl();
         mainForm.setCookie(cookie);
 
-        mainForm.setupData();
+
 
         frame.setContentPane(mainForm.panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.pack();
         frame.setVisible(true);
+
+        mainForm.setupData();
     }
 
 
@@ -235,6 +237,7 @@ public class MainForm {
             String[] weeks = client.getWeeks(html);
 
             thisWeek = weeks[0];
+
 
             for (int i=1;i<weeks.length;i++){
                 cbWeek.addItem(weeks[i]);
@@ -278,7 +281,7 @@ public class MainForm {
 
 
             isLoading = false;
-
+            this.setupLogs(thisWeek);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -293,7 +296,7 @@ public class MainForm {
             addLogURL = client.getLogFuncURLs(html)[0];
             removeLogURL = client.getLogFuncURLs(html)[1];
 
-            //System.out.println(removeLogURL);
+            //System.out.println(html);
 
             WorkLog[] logs = client.getWorkLogs(html);
             logCache.clear();
