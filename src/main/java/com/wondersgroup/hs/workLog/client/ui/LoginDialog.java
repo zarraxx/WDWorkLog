@@ -50,7 +50,8 @@ public class LoginDialog extends JDialog {
                 JOptionPane.showMessageDialog(null, "Username or password Error!");
                 return;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error when login");
         }
 

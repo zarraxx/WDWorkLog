@@ -30,7 +30,7 @@ public class LoginTest {
 //    }
 
     @Test
-    public void testGetURL() throws IOException {
+    public void testGetURL() throws Exception {
         LogClientWSImpl client = new LogClientWSImpl();
         Cookie cookie = client.getSessionCookie();
         Assert.assertTrue(client.postLogin(getProperty("username"),getProperty("password"),cookie));

@@ -166,7 +166,7 @@ public class MainForm {
 
                     setupLogs((String) cbWeek.getSelectedItem());
 
-                } catch (IOException e1) {
+                } catch (Exception e1) {
                     e1.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Error when getEditLogPage");
                 }
@@ -186,7 +186,7 @@ public class MainForm {
                     }else{
                         JOptionPane.showMessageDialog(null, "Remove Log Fail");
                     }
-                } catch (IOException e1) {
+                } catch (Exception e1) {
                     JOptionPane.showMessageDialog(null, "Error when remove Log");
                     e1.printStackTrace();
                 }
@@ -268,7 +268,7 @@ public class MainForm {
                             editLogDialog.setSize(800,400);
                             editLogDialog.setVisible(true);
 
-                        } catch (IOException e1) {
+                        } catch (Exception e1) {
                             e1.printStackTrace();
                             JOptionPane.showMessageDialog(null, "Error when getEditLogPage");
                         }
@@ -283,7 +283,7 @@ public class MainForm {
             isLoading = false;
             this.setupLogs(thisWeek);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error when setupData");
         }
@@ -332,7 +332,7 @@ public class MainForm {
             columnModel.getColumn(12).setMaxWidth(140);
             columnModel.getColumn(13).setMaxWidth(180);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error when setupLogs");
         }

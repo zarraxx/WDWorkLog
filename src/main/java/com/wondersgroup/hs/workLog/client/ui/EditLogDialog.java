@@ -141,7 +141,7 @@ public class EditLogDialog extends JDialog {
         Map<String,String> postBody = createPostData();
         try {
             client.submitWorkLog(postBody,cookie);
-        } catch (IOException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error when submit log");
         }
         dispose();
@@ -224,7 +224,7 @@ public class EditLogDialog extends JDialog {
             }
             cbWorkDay.setSelectedIndex(selectIndex);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

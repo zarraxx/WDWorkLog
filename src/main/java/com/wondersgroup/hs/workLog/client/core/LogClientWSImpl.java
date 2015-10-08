@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class LogClientWSImpl implements LogClient {
 
-    public Cookie getSessionCookie() throws IOException {
+    public Cookie getSessionCookie() throws Exception {
         try (CloseableHttpClient client  = WSUtils.createHttpClient()) {
             HttpClientContext context = WSUtils.createClientContext(null);
             CookieStore cookieStore = (CookieStore) context.getAttribute(HttpClientContext.COOKIE_STORE);
@@ -42,7 +42,7 @@ public class LogClientWSImpl implements LogClient {
         }
     }
 
-    public boolean postLogin(String username, String password, Cookie cookie) throws IOException {
+    public boolean postLogin(String username, String password, Cookie cookie) throws Exception {
         String loginURL = "wad/vdmLogon.jsp";
         Map<String, String> form = new HashMap<>();
 
@@ -102,14 +102,14 @@ public class LogClientWSImpl implements LogClient {
         return cache.toArray(new String[0]);
     }
 
-    public String getPersonWorkLogPage(Cookie cookie) throws IOException {
+    public String getPersonWorkLogPage(Cookie cookie) throws Exception {
         String inputHomeURL = "addPersonWorkLog.jsp";
         String body = WSUtils.getMethod(inputHomeURL, cookie);
 
         return body;
     }
 
-    public String getLogsPage(String queryURL,String week,Cookie cookie) throws IOException {
+    public String getLogsPage(String queryURL,String week,Cookie cookie) throws Exception {
         List<WorkLog> workLogs = new ArrayList<>();
         String url = queryURL +week;
         String html =  WSUtils.getMethod(url, cookie);
@@ -170,7 +170,7 @@ public class LogClientWSImpl implements LogClient {
 
     }
 
-    public String getEditLogPage(String url,Cookie cookie) throws IOException {
+    public String getEditLogPage(String url,Cookie cookie) throws Exception {
         String body = WSUtils.getMethod("wad/" + url, cookie);
         return body;
     }
@@ -298,7 +298,7 @@ public class LogClientWSImpl implements LogClient {
         return editSheet;
     }
 
-    public String[] getThisWeekData(String week,String id,Cookie cookie) throws IOException {
+    public String[] getThisWeekData(String week,String id,Cookie cookie) throws Exception {
         String url = "selectWeekDays.jsp?stWeekStart="+week+"&stProjectSn="+id;
         List<String> cache = new ArrayList<>();
 
@@ -316,7 +316,7 @@ public class LogClientWSImpl implements LogClient {
         return cache.toArray(new String[0]);
     }
 
-    public boolean submitWorkLog(Map<String,String> body,Cookie cookie) throws IOException {
+    public boolean submitWorkLog(Map<String,String> body,Cookie cookie) throws Exception {
         String funcName = body.get("wadFormName");
 
         String url = "submitReloadParentWhenSuccessPMT.jsp?&funcXMLName=WorkLog&funcName=";
@@ -334,7 +334,7 @@ public class LogClientWSImpl implements LogClient {
         return html.contains("工作日志表成功");
     }
 
-    public boolean removeWorkLog(String id,Cookie cookie) throws IOException {
+    public boolean removeWorkLog(String id,Cookie cookie) throws Exception {
         String url = "wad/submitReloadWhenSuccess.jsp?&funcXMLName=WAD_WorkLog_Config.xml&funcName=removeWorkLog";
 
         Map<String,String> postData = new HashMap<>();
